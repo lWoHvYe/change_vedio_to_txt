@@ -6,7 +6,7 @@ import cv2
 import pyprind
 
 
-# 用编辑器跑不起来。但用python自带的跑是可以的。猜测是输出窗口的问题
+# 用编辑器PyCharm跑不起来。但用python自带的跑是可以的。猜测是输出窗口的问题
 class CharFrame:
     ascii_char = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'. "
 
