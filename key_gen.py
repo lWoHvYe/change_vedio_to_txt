@@ -9,6 +9,8 @@ from cryptography import x509
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
+from learn_file_op import read_cert_base64
+
 
 # noinspection PyTypeChecker
 def pkcs15_encode(msg_hash, emLen, with_hash_parameters=True):
@@ -37,8 +39,10 @@ def pkcs15_encode(msg_hash, emLen, with_hash_parameters=True):
     PS = b'\xFF' * (emLen - len(digestInfo) - 3)
     return b'\x00\x01' + PS + b'\x00' + digestInfo
 
+
 # 这里是自己生成的证书 ca.crt
-certBase64 = ""
+certBase64 = read_cert_base64("ca.crt")
+
 cert = x509.load_der_x509_certificate(base64.b64decode(certBase64))
 public_key = cert.public_key()
 sign = int.from_bytes(cert.signature, byteorder="big", )
@@ -49,9 +53,8 @@ digest_cert = SHA256.new(cert.tbs_certificate_bytes)
 r = int.from_bytes(pkcs15_encode(digest_cert, ceil_div(modBits, 8)), byteorder='big', signed=False)
 print(f"result:{r}")
 
-licenseId = 'I1EKS18DABCM4KU'
-licensePart = '{"licenseId":"I1EKS18DABCM4KU","licenseeName":"lWoHvYe","licenseeType":"PERSONAL","assigneeName":"","assigneeEmail":"","licenseRestriction":"","checkConcurrentUse":false,"products":[{"code":"PCWMP","fallbackDate":"2030-12-21","paidUpTo":"2030-12-21","extended":true},{"code":"CL","fallbackDate":"2030-12-21","paidUpTo":"2030-12-21","extended":false},{"code":"PSI","fallbackDate":"2030-12-21","paidUpTo":"2030-12-21","extended":true}],"metadata":"0220240701PSAX000005X","hash":"12345678/0321581538","gracePeriodDays":7,"autoProlongated":false,"isAutoProlongated":false,"trial":false,"aiAllowed":true}'
-
+licenseId = 'WHYWHYWHYWHYGO2'
+licensePart = '{"licenseId":"WHYWHYWHYWHYGO2","licenseeName":"lWoHvYe","licenseeType":"PERSONAL","assigneeName":"","assigneeEmail":"","licenseRestriction":"","checkConcurrentUse":false,"products":[{"code":"PCWMP","fallbackDate":"2035-12-31","paidUpTo":"2035-12-31","extended":true},{"code":"GO","fallbackDate":"2035-12-31","paidUpTo":"2035-12-31","extended":false},{"code":"PSI","fallbackDate":"2035-12-31","paidUpTo":"2035-12-31","extended":true}],"metadata":"0220240702PSAX000005X","hash":"12345678/0-2138820020","gracePeriodDays":7,"autoProlongated":false,"isAutoProlongated":false,"trial":false,"aiAllowed":true}'
 digest = SHA1.new(licensePart.encode('utf-8'))
 
 with open('ca.key') as prifile:
